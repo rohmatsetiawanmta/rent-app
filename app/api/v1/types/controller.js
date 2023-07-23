@@ -1,9 +1,9 @@
 const Types = require('./model');
+const { getAllTypes, createTypes, getOneTypes, updateTypes, deleteTypes } = require('../../../services/mongoose/types');
 
 const create = async (req, res, next) => {
   try {
-    const { name } = req.body;
-    const result = await Types.create({ name });
+    const result = await createTypes(req);
 
     res.status(201).json({ data: result });
   } catch (error) {
@@ -13,7 +13,8 @@ const create = async (req, res, next) => {
 
 const index = async (req, res, next) => {
   try {
-    const result = await Types.find().select('_id name');
+    const result = await getAllTypes();
+
     res.status(200).json({
       data: result,
     });
@@ -24,14 +25,7 @@ const index = async (req, res, next) => {
 
 const find = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await Types.findOne({ _id: id }).select('_id name');
-
-    if (!result) {
-      return res.status(404).json({
-        message: 'ID not found',
-      });
-    }
+    const result = await getOneTypes(req);
 
     res.status(200).json({
       data: result,
@@ -43,16 +37,7 @@ const find = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { name } = req.body;
-
-    const result = await Types.findByIdAndUpdate(id, { name }, { new: true, runValidators: true });
-
-    if (!result) {
-      return res.status(404).json({
-        message: 'ID not found',
-      });
-    }
+    const result = await updateTypes(req);
 
     res.status(200).json({
       data: result,
@@ -64,8 +49,8 @@ const update = async (req, res, next) => {
 
 const destroy = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await Types.findOneAndRemove({ _id: id });
+    const result = await deleteTypes(req);
+
     res.status(200).json({
       data: result,
     });
