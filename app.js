@@ -7,6 +7,7 @@ const app = express();
 
 // router
 const typesRouter = require('./app/api/v1/types/router');
+const imagesRouter = require('./app/api/v1/images/router');
 
 const v1 = '/api/v1/cms';
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(v1, typesRouter);
+app.use(v1, imagesRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
